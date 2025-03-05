@@ -132,7 +132,7 @@ export default function Home() {
       </section>
 
       {/* Feature Section 1: What We Offer */}
-      <section ref={feature1Ref} className="py-16 bg-background">
+      <section ref={feature1Ref} className="py-16 bg-muted">
         <FeatureSection
           image="/assets/images/services.png"
           translationKey="offer"
@@ -140,7 +140,7 @@ export default function Home() {
       </section>
 
       {/* Feature Section 2: What Sets Us Apart */}
-      <section ref={feature2Ref} className="py-16 bg-muted">
+      <section ref={feature2Ref} className="py-16 bg-background">
         <FeatureSection
           image="/assets/images/whatsetsapart.jpg"
           reverse={true}
@@ -149,7 +149,7 @@ export default function Home() {
       </section>
 
       {/* Services Section with Infinite Slider */}
-      <section ref={servicesRef} className="py-16 bg-background">
+      <section ref={servicesRef} className="py-16 bg-muted">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8 text-center">
             {t('footer.services') || "Our Services"}

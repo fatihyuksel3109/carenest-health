@@ -51,7 +51,7 @@ const ValuesSection = () => {
   ];
 
   return (
-    <section className="py-16 bg-muted">
+    <section>
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-center">{t('values.title') || "Our Values"}</h2>
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-8">
