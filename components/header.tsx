@@ -94,7 +94,7 @@ const Header = () => {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'text-sm font-medium transition-colors hover:text-primary',
+                  'text-md font-medium transition-colors hover:text-primary',
                   pathname === link.href
                     ? 'text-primary font-semibold'
                     : 'text-muted-foreground'
@@ -103,7 +103,7 @@ const Header = () => {
                 {link.label}
               </Link>
             ))}
-            <Button variant="default" size="sm">
+            <Button variant="default" className=' hover:scale-105' size="sm">
               {t('nav.getService')}
             </Button>
             <button

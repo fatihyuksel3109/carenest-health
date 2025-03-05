@@ -27,8 +27,8 @@ export default function Home() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const animationRef = useRef<GSAPAnimation | null>(null); // Store the GSAP animation instance
 
-  // Duplicate cards only once on component mount
-  const duplicatedCards = useRef(false);
+  // Duplicate the services data for infinite scroll
+  const duplicatedServices = [...servicesData, ...servicesData];
 
   useEffect(() => {
     // Animate the HeroCarousel
@@ -84,14 +84,7 @@ export default function Home() {
 
     // Set up the infinite scroll animation for service cards
     if (sliderRef.current) {
-      // Duplicate cards only once
-      if (!duplicatedCards.current) {
-        const clonedCards = sliderRef.current.innerHTML;
-        sliderRef.current.innerHTML += clonedCards;
-        duplicatedCards.current = true;
-      }
-
-      const totalWidth = sliderRef.current.scrollWidth / 2; // Half because we duplicated the cards
+      const totalWidth = sliderRef.current.scrollWidth / 2; // Half because we duplicated the data
 
       // GSAP animation for infinite scroll
       animationRef.current = gsap.to(sliderRef.current, {
@@ -111,14 +104,14 @@ export default function Home() {
       sliderRef.current.addEventListener("mouseenter", pauseAnimation);
       sliderRef.current.addEventListener("mouseleave", resumeAnimation);
 
-      // Clean up event listeners on unmount
+      // Clean up event listeners and animation on unmount
       return () => {
         sliderRef.current?.removeEventListener("mouseenter", pauseAnimation);
         sliderRef.current?.removeEventListener("mouseleave", resumeAnimation);
         animationRef.current?.kill();
       };
     }
-  }, [t]); // Re-run animation if translation function changes (language changes)
+  }, []); // Run only on mount (we'll handle translation updates via React rendering)
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -160,10 +153,11 @@ export default function Home() {
               className="flex space-x-4 py-2"
               style={{ width: "max-content" }}
             >
-              {servicesData.map((service, index) => (
+              {duplicatedServices.map((service, index) => (
                 <div
                   key={index}
                   className="bg-card rounded-lg shadow-md overflow-hidden w-80 flex-shrink-0"
+                  aria-roledescription="carousel item"
                 >
                   <Image
                     src={service.image}
