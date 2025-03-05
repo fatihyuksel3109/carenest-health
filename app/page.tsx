@@ -1,4 +1,4 @@
-// app/page.tsx (updated)
+// app/page.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -9,14 +9,21 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import { useLanguage } from "@/components/language-provider";
+import { servicesData } from "@/data/services";
 
+// Register GSAP ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const { t } = useLanguage();
   const heroRef = useRef<HTMLDivElement>(null);
   const feature1Ref = useRef<HTMLDivElement>(null);
   const feature2Ref = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
   const valuesRef = useRef<HTMLDivElement>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
@@ -53,7 +60,29 @@ export default function Home() {
 
     animateSection(feature1Ref);
     animateSection(feature2Ref);
+    animateSection(servicesRef);
     animateSection(valuesRef);
+
+    // Infinite scrolling animation for service cards
+    if (sliderRef.current) {
+      const cards = sliderRef.current.children;
+      const totalWidth = sliderRef.current.scrollWidth / 2; // Half because we duplicate the cards
+
+      // Duplicate the cards for seamless looping
+      const clonedCards = sliderRef.current.innerHTML;
+      sliderRef.current.innerHTML += clonedCards;
+
+      // GSAP animation for infinite scroll
+      gsap.to(sliderRef.current, {
+        x: -totalWidth,
+        duration: 30,
+        ease: "linear",
+        repeat: -1,
+        modifiers: {
+          x: gsap.utils.unitize((x) => parseFloat(x) % totalWidth),
+        },
+      });
+    }
 
     // Show/hide Back to Top button
     const handleScroll = () => {
@@ -62,7 +91,7 @@ export default function Home() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [t]); // Re-run animation if translation function changes (language changes)
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -95,6 +124,41 @@ export default function Home() {
       {/* Values Section */}
       <section ref={valuesRef} className="py-16 bg-background">
         <ValuesSection />
+      </section>
+
+      {/* Services Section with Infinite Slider */}
+      <section ref={servicesRef} className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold mb-8 text-center">
+            {t('footer.services') || "Our Services"}
+          </h2>
+          <div className="overflow-hidden">
+            <div
+              ref={sliderRef}
+              className="flex space-x-4 py-2"
+              style={{ width: "max-content" }}
+            >
+              {servicesData.map((service, index) => (
+                <div
+                  key={index}
+                  className="bg-card rounded-lg shadow-md overflow-hidden w-80 flex-shrink-0"
+                >
+                  <Image
+                    src={service.image}
+                    alt={t(service.titleKey)}
+                    width={320}
+                    height={200}
+                    className="w-full h-40 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-bold mb-2">{t(service.titleKey)}</h3>
+                    <p className="text-muted-foreground text-sm">{t(service.descriptionKey)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Back to Top Button */}
