@@ -55,6 +55,38 @@ const translations = {
     'footer.social.facebook': 'Facebook',
     'footer.social.twitter': 'Twitter',
     'footer.social.instagram': 'Instagram',
+    'footer.services.serumTherapy': 'Serum Therapy',
+    'footer.services.cuppingTherapy': 'Cupping Therapy',
+    'footer.services.vitaminTherapy': 'Vitamin Therapy',
+    'footer.services.vaccination': 'Vaccination',
+    'footer.services.leechingTherapy': 'Leeching Therapy',
+
+    'about.approach.title': 'Our Approach',
+    'about.approach.personCentered.title': 'Person-Centered Care',
+    'about.approach.personCentered.description':
+      'We believe in tailoring our care to each individual’s unique needs, preferences, and goals. Our person-centered approach ensures that every client receives care that respects their dignity, autonomy, and personal choices.',
+    'about.approach.continuousImprovement.title': 'Continuous Improvement',
+    'about.approach.continuousImprovement.description':
+      'We are committed to ongoing learning and improvement. Through regular training, feedback, and evaluation, we continuously enhance our services to provide the highest quality care possible.',
+    'about.approach.collaborativeCare.title': 'Collaborative Care',
+    'about.approach.collaborativeCare.description':
+      'We work closely with clients, families, healthcare professionals, and community resources to create a comprehensive care network. This collaborative approach ensures that all aspects of a client’s well-being are addressed.',
+    'about.approach.ethicalPractice.title': 'Ethical Practice',
+    'about.approach.ethicalPractice.description':
+      'Our work is guided by strong ethical principles, including respect, integrity, and accountability. We adhere to the highest standards of professional conduct in all our interactions.',
+
+    'about.team.member1.name': 'Dr. Sarah Johnson',
+    'about.team.member1.position': 'Chief Medical Officer',
+    'about.team.member1.description':
+      'Dr. Johnson has over 15 years of experience in home healthcare, specializing in complex care and patient advocacy.',
+    'about.team.member2.name': 'Emily Davis',
+    'about.team.member2.position': 'Head Nurse',
+    'about.team.member2.description':
+      'Emily leads our nursing team with a focus on compassionate care and innovative therapy solutions.',
+    'about.team.member3.name': 'Michael Brown',
+    'about.team.member3.position': 'Therapy Specialist',
+    'about.team.member3.description':
+      'Michael specializes in alternative therapies, including cupping and leeching, to promote natural healing.',
     
     // About Page
     'about.title': 'About Us',
@@ -150,6 +182,38 @@ const translations = {
     'footer.social.facebook': 'Facebook',
     'footer.social.twitter': 'Twitter',
     'footer.social.instagram': 'Instagram',
+    'footer.services.serumTherapy': 'Serum Terapisi',
+    'footer.services.cuppingTherapy': 'Hacamat Terapisi',
+    'footer.services.vitaminTherapy': 'Vitamin Terapisi',
+    'footer.services.vaccination': 'Aşılama',
+    'footer.services.leechingTherapy': 'Sülük Terapisi',
+
+    'about.approach.title': 'Yaklaşımımız',
+    'about.approach.personCentered.title': 'Kişi Merkezli Bakım',
+    'about.approach.personCentered.description':
+      'Her bireyin benzersiz ihtiyaçlarına, tercihlerine ve hedeflerine göre bakım sunmaya inanıyoruz. Kişi merkezli yaklaşımımız, her müşterinin saygınlık, özerklik ve kişisel seçimlerine saygı duyan bir bakım almasını sağlar.',
+    'about.approach.continuousImprovement.title': 'Sürekli İyileştirme',
+    'about.approach.continuousImprovement.description':
+      'Sürekli öğrenme ve iyileştirmeye kararlıyız. Düzenli eğitim, geri bildirim ve değerlendirme yoluyla hizmetlerimizi sürekli geliştirerek mümkün olan en yüksek kalitede bakım sunuyoruz.',
+    'about.approach.collaborativeCare.title': 'İşbirlikçi Bakım',
+    'about.approach.collaborativeCare.description':
+      'Müşteriler, aileler, sağlık profesyonelleri ve topluluk kaynaklarıyla yakın bir şekilde çalışarak kapsamlı bir bakım ağı oluşturuyoruz. Bu işbirlikçi yaklaşım, müşterinin tüm refah yönlerinin ele alınmasını sağlar.',
+    'about.approach.ethicalPractice.title': 'Etik Uygulama',
+    'about.approach.ethicalPractice.description':
+      'Çalışmalarımız, saygı, dürüstlük ve hesap verebilirlik gibi güçlü etik ilkelerle yönlendirilir. Tüm etkileşimlerimizde en yüksek profesyonel davranış standartlarına bağlıyız.',
+
+    'about.team.member1.name': 'Dr. Sarah Johnson',
+    'about.team.member1.position': 'Baş Tıbbi Sorumlu',
+    'about.team.member1.description':
+      'Dr. Johnson, evde sağlık hizmetlerinde 15 yılı aşkın deneyime sahip, karmaşık bakım ve hasta savunuculuğu konusunda uzmanlaşmıştır.',
+    'about.team.member2.name': 'Emily Davis',
+    'about.team.member2.position': 'Baş Hemşire',
+    'about.team.member2.description':
+      'Emily, şefkatli bakım ve yenilikçi terapi çözümlerine odaklanarak hemşire ekibimizi yönetiyor.',
+    'about.team.member3.name': 'Michael Brown',
+    'about.team.member3.position': 'Terapi Uzmanı',
+    'about.team.member3.description':
+      'Michael, hacamat ve sülük terapisi gibi alternatif terapilerde uzmanlaşarak doğal iyileşmeyi teşvik eder.',
     
     // About Page
     'about.title': 'Hakkımızda',
