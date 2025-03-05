@@ -79,7 +79,7 @@ export default function BlogsPage() {
                     language === "tr" ? "tr-TR" : "en-US",
                     {
                       year: "numeric",
-                      month: "long",
+                      month: "numeric",
                       day: "numeric",
                     }
                   )}
