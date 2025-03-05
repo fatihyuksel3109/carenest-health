@@ -80,7 +80,7 @@ const Header = () => {
               alt="Carenest Istanbul Logo"
               width={150} 
               height={75} 
-              className="object-contain"
+              className="object-contain block md:hidden lg:block"
             />
           </Link>
 
