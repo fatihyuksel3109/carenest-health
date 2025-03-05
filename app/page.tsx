@@ -25,6 +25,10 @@ export default function Home() {
   const valuesRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const animationRef = useRef<GSAPAnimation | null>(null); // Store the GSAP animation instance
+
+  // Duplicate cards only once on component mount
+  const duplicatedCards = useRef(false);
 
   useEffect(() => {
     // Animate the HeroCarousel
@@ -63,17 +67,34 @@ export default function Home() {
     animateSection(servicesRef);
     animateSection(valuesRef);
 
-    // Infinite scrolling animation for service cards
-    if (sliderRef.current) {
-      const cards = sliderRef.current.children;
-      const totalWidth = sliderRef.current.scrollWidth / 2; // Half because we duplicate the cards
+    // Show/hide Back to Top button
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 300);
+    };
 
-      // Duplicate the cards for seamless looping
-      const clonedCards = sliderRef.current.innerHTML;
-      sliderRef.current.innerHTML += clonedCards;
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []); // Run only on mount (no dependencies for static animations)
+
+  useEffect(() => {
+    // Clean up previous animation before starting a new one
+    if (animationRef.current) {
+      animationRef.current.kill();
+    }
+
+    // Set up the infinite scroll animation for service cards
+    if (sliderRef.current) {
+      // Duplicate cards only once
+      if (!duplicatedCards.current) {
+        const clonedCards = sliderRef.current.innerHTML;
+        sliderRef.current.innerHTML += clonedCards;
+        duplicatedCards.current = true;
+      }
+
+      const totalWidth = sliderRef.current.scrollWidth / 2; // Half because we duplicated the cards
 
       // GSAP animation for infinite scroll
-      gsap.to(sliderRef.current, {
+      animationRef.current = gsap.to(sliderRef.current, {
         x: -totalWidth,
         duration: 30,
         ease: "linear",
@@ -82,15 +103,21 @@ export default function Home() {
           x: gsap.utils.unitize((x) => parseFloat(x) % totalWidth),
         },
       });
+
+      // Pause on hover
+      const pauseAnimation = () => animationRef.current?.pause();
+      const resumeAnimation = () => animationRef.current?.resume();
+
+      sliderRef.current.addEventListener("mouseenter", pauseAnimation);
+      sliderRef.current.addEventListener("mouseleave", resumeAnimation);
+
+      // Clean up event listeners on unmount
+      return () => {
+        sliderRef.current?.removeEventListener("mouseenter", pauseAnimation);
+        sliderRef.current?.removeEventListener("mouseleave", resumeAnimation);
+        animationRef.current?.kill();
+      };
     }
-
-    // Show/hide Back to Top button
-    const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 300);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
   }, [t]); // Re-run animation if translation function changes (language changes)
 
   const scrollToTop = () => {
@@ -119,11 +146,6 @@ export default function Home() {
           reverse={true}
           translationKey="apart"
         />
-      </section>
-
-      {/* Values Section */}
-      <section ref={valuesRef} className="py-16 bg-background">
-        <ValuesSection />
       </section>
 
       {/* Services Section with Infinite Slider */}
@@ -159,6 +181,11 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Values Section */}
+      <section ref={valuesRef} className="py-16 bg-background">
+        <ValuesSection />
       </section>
 
       {/* Back to Top Button */}
