@@ -1,3 +1,4 @@
+// app/blogs/[id]/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/components/language-provider";
-import ReactMarkdown from "react-markdown"; // Import react-markdown
-import rehypeRaw from "rehype-raw"; // Allow raw HTML in Markdown
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm"; // Add remark-gfm
 
 interface Blog {
   _id: string;
@@ -113,7 +115,10 @@ export default function BlogPost() {
           </div>
 
           <div className="prose prose-lg max-w-none dark:prose-invert">
-            <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+            <ReactMarkdown
+              rehypePlugins={[rehypeRaw]}
+              remarkPlugins={[remarkGfm]} // Add remark-gfm for full Markdown support
+            >
               {blog.content[language]}
             </ReactMarkdown>
           </div>
