@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,6 +30,13 @@ interface Blog {
   author?: string;
 }
 
+interface AdminData {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
 export default function AdminPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -49,6 +56,16 @@ export default function AdminPage() {
     image: "",
   });
 
+  // Admin settings state
+  const [adminData, setAdminData] = useState<AdminData | null>(null);
+  const [adminForm, setAdminForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const [isEditingAdmin, setIsEditingAdmin] = useState(false);
+
+  // Fetch blogs
   useEffect(() => {
     const fetchBlogs = async () => {
       setIsLoading(true);
@@ -75,13 +92,38 @@ export default function AdminPage() {
     }
   }, [status, toast]);
 
+  // Fetch admin data
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      try {
+        console.log('Fetching admin data with session:', session);
+        const response = await fetch('/api/admin');
+        if (!response.ok) throw new Error('Failed to fetch admin data');
+        const data = await response.json();
+        setAdminData(data);
+        setAdminForm({ name: data.name, email: data.email, password: '' });
+      } catch (error) {
+        console.error('Fetch admin error:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to load admin data',
+          variant: 'destructive',
+        });
+      }
+    };
+  
+    if (status === "authenticated") {
+      fetchAdminData();
+    }
+  }, [status, toast]);
+
+  // Redirect if unauthenticated
   useEffect(() => {
     console.log("Session status:", status, "Session data:", session);
     if (status === "unauthenticated") {
       console.log("Unauthenticated, redirecting to /admin/login");
       router.push("/admin/login");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, router]);
 
   const handleInputChange = (
@@ -97,6 +139,11 @@ export default function AdminPage() {
         [name]: { ...prev[name as "title" | "excerpt" | "content"], [lang]: value },
       }));
     }
+  };
+
+  const handleAdminInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setAdminForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCreateBlog = () => {
@@ -219,12 +266,51 @@ export default function AdminPage() {
     }
   };
 
+  const handleAdminSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/admin', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(adminForm),
+      });
+      if (!response.ok) throw new Error('Failed to update admin data');
+      const updatedData = await response.json();
+      setAdminData(updatedData.data);
+      setIsEditingAdmin(false);
+      toast({
+        title: 'Admin updated',
+        description: 'Your account information has been successfully updated.',
+      });
+
+      // If email or password changed, sign out to force re-authentication
+      if (
+        adminForm.email !== session?.user?.email ||
+        adminForm.password
+      ) {
+        await signOut({ redirect: false });
+        router.push('/admin/login');
+      }
+    } catch (error) {
+      console.error('Admin update error:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update admin data',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   if (status === "loading" || isLoading) {
     return (
       <div className="pt-24">
         <div className="container mx-auto px-4 py-12">
           <div className="flex justify-center items-center h-64">
-            <p className="text-lg">Loading...</p>
+            <p className="text-lg">{t('admin.loading')}</p>
           </div>
         </div>
       </div>
@@ -409,7 +495,7 @@ export default function AdminPage() {
                             id="image"
                             name="image"
                             value={formData.image}
-                            onChange={(e) => handleInputChange(e, "en")} // Lang is irrelevant for image
+                            onChange={(e) => handleInputChange(e, "en")}
                             placeholder="https://example.com/image.jpg"
                           />
                         </div>
@@ -465,16 +551,73 @@ export default function AdminPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <p className="font-medium">Email</p>
-                    <p className="text-muted-foreground">{session?.user?.email}</p>
+                {isEditingAdmin ? (
+                  <form onSubmit={handleAdminSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-sm font-medium">Name</label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={adminForm.name}
+                        onChange={handleAdminInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-sm font-medium">Email</label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={adminForm.email}
+                        onChange={handleAdminInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="password" className="text-sm font-medium">New Password (optional)</label>
+                      <Input
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={adminForm.password}
+                        onChange={handleAdminInputChange}
+                        placeholder="Leave blank to keep current password"
+                      />
+                    </div>
+                    <div className="flex justify-end space-x-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsEditingAdmin(false)}
+                        disabled={isLoading}
+                      >
+                        Cancel
+                      </Button>
+                      <Button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Saving...' : 'Save Changes'}
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="space-y-4">
+                    <div>
+                      <p className="font-medium">Name</p>
+                      <p className="text-muted-foreground">{adminData?.name || 'Loading...'}</p>
+                    </div>
+                    <div>
+                      <p className="font-medium">Email</p>
+                      <p className="text-muted-foreground">{adminData?.email || 'Loading...'}</p>
+                    </div>
+                    <div>
+                      <p className="font-medium">Role</p>
+                      <p className="text-muted-foreground">{adminData?.role || 'Loading...'}</p>
+                    </div>
+                    <Button onClick={() => setIsEditingAdmin(true)} disabled={isLoading || !adminData}>
+                      Edit Profile
+                    </Button>
                   </div>
-                  <div>
-                    <p className="font-medium">Role</p>
-                    <p className="text-muted-foreground">Administrator</p>
-                  </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
