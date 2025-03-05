@@ -1,8 +1,7 @@
-// app/components/footer.tsx
 "use client";
 
 import Link from 'next/link';
-import Image from 'next/image'; // Import Image component
+import Image from 'next/image';
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from './language-provider';
 
@@ -19,9 +18,9 @@ const Footer = () => {
               <Image
                 src="/assets/images/carenestlogo-text.png"
                 alt="Carenest Istanbul Logo"
-                width={120} // Adjust width as needed
-                height={120} // Adjust height as needed
-                className="object-contain -mt-4"
+                width={240} 
+                height={120} 
+                className="-mt-4"
               />
             </div>
             <p className="text-sm">
