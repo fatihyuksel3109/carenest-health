@@ -1,44 +1,33 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { useLanguage } from '@/components/language-provider';
-import { PlusCircle, Edit, Trash2 } from 'lucide-react';
-
-// Mock blog data (would be fetched from API in a real app)
-const mockBlogs = [
-  {
-    id: '1',
-    title: 'The Importance of Compassionate Care',
-    excerpt: 'Exploring how compassionate care can significantly improve the quality of life for individuals with complex care needs.',
-    content: 'Full content here...',
-    image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    date: '2025-03-15',
-  },
-  {
-    id: '2',
-    title: 'Building Strong Support Networks',
-    excerpt: 'How creating robust support networks can enhance the effectiveness of home care services and improve client outcomes.',
-    content: 'Full content here...',
-    image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    date: '2025-02-28',
-  },
-];
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/components/language-provider";
+import { PlusCircle, Edit, Trash2 } from "lucide-react";
+import Image from "next/image";
 
 interface Blog {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
+  _id: string;
+  title: { en: string; tr: string };
+  excerpt: { en: string; tr: string };
+  content: { en: string; tr: string };
   image: string;
   date: string;
+  author?: string;
 }
 
 export default function AdminPage() {
@@ -46,45 +35,68 @@ export default function AdminPage() {
   const router = useRouter();
   const { toast } = useToast();
   const { t } = useLanguage();
-  
+
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState({
-    title: '',
-    excerpt: '',
-    content: '',
-    image: '',
+    title: { en: "", tr: "" },
+    excerpt: { en: "", tr: "" },
+    content: { en: "", tr: "" },
+    image: "",
   });
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/admin/login');
-    }
-  }, [status, router]);
-
-  useEffect(() => {
-    // In a real app, you would fetch blogs from your API
-    // Simulating API fetch
     const fetchBlogs = async () => {
-      // const response = await fetch('/api/blogs');
-      // const data = await response.json();
-      // setBlogs(data);
-      
-      // Using mock data for now
-      setBlogs(mockBlogs);
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/blogs");
+        if (!response.ok) throw new Error("Failed to fetch blogs");
+        const data = await response.json();
+        setBlogs(data);
+      } catch (error) {
+        console.error("Fetch blogs error:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load blogs",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    if (status === 'authenticated') {
+    if (status === "authenticated") {
+      console.log("Authenticated, fetching blogs");
       fetchBlogs();
     }
-  }, [status]);
+  }, [status, toast]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  useEffect(() => {
+    console.log("Session status:", status, "Session data:", session);
+    if (status === "unauthenticated") {
+      console.log("Unauthenticated, redirecting to /admin/login");
+      router.push("/admin/login");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, router]);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    lang: "en" | "tr"
+  ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "image") {
+      setFormData((prev) => ({ ...prev, image: value }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: { ...prev[name as "title" | "excerpt" | "content"], [lang]: value },
+      }));
+    }
   };
 
   const handleCreateBlog = () => {
@@ -92,10 +104,10 @@ export default function AdminPage() {
     setIsEditing(false);
     setSelectedBlog(null);
     setFormData({
-      title: '',
-      excerpt: '',
-      content: '',
-      image: '',
+      title: { en: "", tr: "" },
+      excerpt: { en: "", tr: "" },
+      content: { en: "", tr: "" },
+      image: "",
     });
   };
 
@@ -104,87 +116,110 @@ export default function AdminPage() {
     setIsCreating(false);
     setSelectedBlog(blog);
     setFormData({
-      title: blog.title,
-      excerpt: blog.excerpt,
-      content: blog.content,
+      title: { en: blog.title.en, tr: blog.title.tr },
+      excerpt: { en: blog.excerpt.en, tr: blog.excerpt.tr },
+      content: { en: blog.content.en, tr: blog.content.tr },
       image: blog.image,
     });
   };
 
-  const handleDeleteBlog = (id: string) => {
-    // In a real app, you would call your API to delete the blog
-    // Simulating API call
-    const updatedBlogs = blogs.filter((blog) => blog.id !== id);
-    setBlogs(updatedBlogs);
-    
-    toast({
-      title: 'Blog deleted',
-      description: 'The blog post has been successfully deleted.',
-    });
-    
-    if (selectedBlog?.id === id) {
-      setSelectedBlog(null);
-      setIsEditing(false);
-      setIsCreating(false);
+  const handleDeleteBlog = async (id: string) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/blogs/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Failed to delete blog");
+      setBlogs(blogs.filter((blog) => blog._id !== id));
+      toast({
+        title: "Blog deleted",
+        description: "The blog post has been successfully deleted.",
+      });
+      if (selectedBlog?._id === id) {
+        setSelectedBlog(null);
+        setIsEditing(false);
+        setIsCreating(false);
+      }
+    } catch (error) {
+      console.error("Delete blog error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete blog",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (isCreating) {
-      // In a real app, you would call your API to create a new blog
-      // Simulating API call
-      const newBlog: Blog = {
-        id: Date.now().toString(),
-        title: formData.title,
-        excerpt: formData.excerpt,
-        content: formData.content,
-        image: formData.image,
-        date: new Date().toISOString().split('T')[0],
-      };
-      
-      setBlogs([newBlog, ...blogs]);
-      
+    setIsLoading(true);
+
+    try {
+      if (isCreating) {
+        const response = await fetch("/api/blogs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        if (!response.ok) throw new Error("Failed to create blog");
+        const newBlog = await response.json();
+        setBlogs([newBlog, ...blogs]);
+        toast({
+          title: "Blog created",
+          description: "The blog post has been successfully created.",
+        });
+      } else if (isEditing && selectedBlog) {
+        const response = await fetch(`/api/blogs/${selectedBlog._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        if (!response.ok) throw new Error("Failed to update blog");
+        await response.json();
+        if (!selectedBlog) throw new Error("Selected blog is null");
+        const updatedBlog: Blog = {
+          _id: selectedBlog._id,
+          date: selectedBlog.date,
+          author: selectedBlog.author,
+          title: formData.title,
+          excerpt: formData.excerpt,
+          content: formData.content,
+          image: formData.image,
+        };
+        setBlogs(
+          blogs.map((blog) =>
+            blog._id === selectedBlog._id ? updatedBlog : blog
+          )
+        );
+        toast({
+          title: "Blog updated",
+          description: "The blog post has been successfully updated.",
+        });
+      }
+    } catch (error) {
+      console.error("Submit error:", error);
       toast({
-        title: 'Blog created',
-        description: 'The blog post has been successfully created.',
+        title: "Error",
+        description: isCreating ? "Failed to create blog" : "Failed to update blog",
+        variant: "destructive",
       });
-    } else if (isEditing && selectedBlog) {
-      // In a real app, you would call your API to update the blog
-      // Simulating API call
-      const updatedBlogs = blogs.map((blog) =>
-        blog.id === selectedBlog.id
-          ? {
-              ...blog,
-              title: formData.title,
-              excerpt: formData.excerpt,
-              content: formData.content,
-              image: formData.image,
-            }
-          : blog
-      );
-      
-      setBlogs(updatedBlogs);
-      
-      toast({
-        title: 'Blog updated',
-        description: 'The blog post has been successfully updated.',
+    } finally {
+      setIsCreating(false);
+      setIsEditing(false);
+      setSelectedBlog(null);
+      setFormData({
+        title: { en: "", tr: "" },
+        excerpt: { en: "", tr: "" },
+        content: { en: "", tr: "" },
+        image: "",
       });
+      setIsLoading(false);
     }
-    
-    setIsCreating(false);
-    setIsEditing(false);
-    setSelectedBlog(null);
-    setFormData({
-      title: '',
-      excerpt: '',
-      content: '',
-      image: '',
-    });
   };
 
-  if (status === 'loading') {
+  if (status === "loading" || isLoading) {
     return (
       <div className="pt-24">
         <div className="container mx-auto px-4 py-12">
@@ -196,49 +231,51 @@ export default function AdminPage() {
     );
   }
 
-  if (status === 'unauthenticated') {
-    return null; // Will redirect in useEffect
+  if (status === "unauthenticated") {
+    return null;
   }
 
   return (
     <div className="pt-24">
       <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8">{t('admin.title')}</h1>
-        
+        <h1 className="text-3xl font-bold mb-8">{t("admin.title")}</h1>
+
         <Tabs defaultValue="blogs" className="w-full">
           <TabsList className="mb-8">
-            <TabsTrigger value="blogs">Manage Blogs</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
+            <TabsTrigger value="blogs">{t("admin.blogs.manage") || "Manage Blogs"}</TabsTrigger>
+            <TabsTrigger value="settings">{t("admin.blogs.settings") || "Settings"}</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="blogs">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-1">
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold">{t('admin.blogs.title')}</h2>
-                  <Button onClick={handleCreateBlog} size="sm">
+                  <h2 className="text-xl font-semibold">{t("admin.blogs.title")}</h2>
+                  <Button onClick={handleCreateBlog} size="sm" disabled={isLoading}>
                     <PlusCircle className="h-4 w-4 mr-2" />
-                    {t('admin.blogs.create')}
+                    {t("admin.blogs.create")}
                   </Button>
                 </div>
-                
+
                 <div className="space-y-4">
                   {blogs.map((blog) => (
-                    <Card key={blog.id} className="overflow-hidden">
+                    <Card key={blog._id} className="overflow-hidden">
                       <div className="h-32 overflow-hidden">
-                        <img
-                          src={blog.image}
-                          alt={blog.title}
+                        <Image
+                          src={blog.image || "https://via.placeholder.com/400x400"}
+                          alt={blog.title.en}
+                          width={400}
+                          height={400}
                           className="w-full h-full object-cover"
                         />
                       </div>
                       <CardHeader className="p-4">
-                        <CardTitle className="text-lg">{blog.title}</CardTitle>
+                        <CardTitle className="text-lg">{blog.title.en}</CardTitle>
                         <CardDescription className="text-xs">
-                          {new Date(blog.date).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
+                          {new Date(blog.date).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
                           })}
                         </CardDescription>
                       </CardHeader>
@@ -247,91 +284,136 @@ export default function AdminPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleEditBlog(blog)}
+                          disabled={isLoading}
                         >
                           <Edit className="h-4 w-4 mr-2" />
-                          {t('admin.blogs.edit')}
+                          {t("admin.blogs.edit")}
                         </Button>
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleDeleteBlog(blog.id)}
+                          onClick={() => handleDeleteBlog(blog._id)}
+                          disabled={isLoading}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
-                          {t('admin.blogs.delete')}
+                          {t("admin.blogs.delete")}
                         </Button>
                       </CardFooter>
                     </Card>
                   ))}
                 </div>
               </div>
-              
+
               <div className="lg:col-span-2">
                 {(isCreating || isEditing) && (
                   <Card>
                     <CardHeader>
                       <CardTitle>
-                        {isCreating
-                          ? t('admin.blogs.create')
-                          : t('admin.blogs.edit')}
+                        {isCreating ? t("admin.blogs.create") : t("admin.blogs.edit")}
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-2">
-                          <label htmlFor="title" className="text-sm font-medium">
-                            {t('admin.blogs.form.title')}
-                          </label>
-                          <Input
-                            id="title"
-                            name="title"
-                            value={formData.title}
-                            onChange={handleInputChange}
-                            required
-                          />
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <label htmlFor="excerpt" className="text-sm font-medium">
-                            Excerpt
-                          </label>
-                          <Textarea
-                            id="excerpt"
-                            name="excerpt"
-                            value={formData.excerpt}
-                            onChange={handleInputChange}
-                            rows={3}
-                            required
-                          />
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <label htmlFor="content" className="text-sm font-medium">
-                            {t('admin.blogs.form.content')}
-                          </label>
-                          <Textarea
-                            id="content"
-                            name="content"
-                            value={formData.content}
-                            onChange={handleInputChange}
-                            rows={10}
-                            required
-                          />
-                        </div>
-                        
+                        <Tabs defaultValue="en" className="w-full">
+                          <TabsList className="mb-4">
+                            <TabsTrigger value="en">English</TabsTrigger>
+                            <TabsTrigger value="tr">Turkish</TabsTrigger>
+                          </TabsList>
+
+                          <TabsContent value="en">
+                            <div className="space-y-2">
+                              <label htmlFor="title-en" className="text-sm font-medium">
+                                Title (English)
+                              </label>
+                              <Input
+                                id="title-en"
+                                name="title"
+                                value={formData.title.en}
+                                onChange={(e) => handleInputChange(e, "en")}
+                                required
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label htmlFor="excerpt-en" className="text-sm font-medium">
+                                Excerpt (English)
+                              </label>
+                              <Textarea
+                                id="excerpt-en"
+                                name="excerpt"
+                                value={formData.excerpt.en}
+                                onChange={(e) => handleInputChange(e, "en")}
+                                rows={3}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label htmlFor="content-en" className="text-sm font-medium">
+                                Content (English)
+                              </label>
+                              <Textarea
+                                id="content-en"
+                                name="content"
+                                value={formData.content.en}
+                                onChange={(e) => handleInputChange(e, "en")}
+                                rows={10}
+                                required
+                              />
+                            </div>
+                          </TabsContent>
+
+                          <TabsContent value="tr">
+                            <div className="space-y-2">
+                              <label htmlFor="title-tr" className="text-sm font-medium">
+                                Title (Turkish)
+                              </label>
+                              <Input
+                                id="title-tr"
+                                name="title"
+                                value={formData.title.tr}
+                                onChange={(e) => handleInputChange(e, "tr")}
+                                required
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label htmlFor="excerpt-tr" className="text-sm font-medium">
+                                Excerpt (Turkish)
+                              </label>
+                              <Textarea
+                                id="excerpt-tr"
+                                name="excerpt"
+                                value={formData.excerpt.tr}
+                                onChange={(e) => handleInputChange(e, "tr")}
+                                rows={3}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label htmlFor="content-tr" className="text-sm font-medium">
+                                Content (Turkish)
+                              </label>
+                              <Textarea
+                                id="content-tr"
+                                name="content"
+                                value={formData.content.tr}
+                                onChange={(e) => handleInputChange(e, "tr")}
+                                rows={10}
+                                required
+                              />
+                            </div>
+                          </TabsContent>
+                        </Tabs>
+
                         <div className="space-y-2">
                           <label htmlFor="image" className="text-sm font-medium">
-                            {t('admin.blogs.form.image')}
+                            {t("admin.blogs.form.image")}
                           </label>
                           <Input
                             id="image"
                             name="image"
                             value={formData.image}
-                            onChange={handleInputChange}
+                            onChange={(e) => handleInputChange(e, "en")} // Lang is irrelevant for image
                             placeholder="https://example.com/image.jpg"
-                            required
                           />
                         </div>
-                        
+
                         <div className="flex justify-end space-x-4">
                           <Button
                             type="button"
@@ -341,30 +423,31 @@ export default function AdminPage() {
                               setIsEditing(false);
                               setSelectedBlog(null);
                             }}
+                            disabled={isLoading}
                           >
                             Cancel
                           </Button>
-                          <Button type="submit">
-                            {t('admin.blogs.form.submit')}
+                          <Button type="submit" disabled={isLoading}>
+                            {isLoading ? "Submitting..." : t("admin.blogs.form.submit")}
                           </Button>
                         </div>
                       </form>
                     </CardContent>
                   </Card>
                 )}
-                
+
                 {!isCreating && !isEditing && (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center p-8">
                       <h3 className="text-xl font-semibold mb-2">
-                        Select a blog to edit or create a new one
+                        {t("admin.blogs.editCreateTitle") || "Select a blog to edit or create a new one"}
                       </h3>
                       <p className="text-muted-foreground mb-4">
-                        Use the buttons on the left to manage your blog posts
+                        {t("admin.blogs.editCreateText") || "Use the buttons on the left to manage your blog posts"}
                       </p>
-                      <Button onClick={handleCreateBlog}>
+                      <Button onClick={handleCreateBlog} disabled={isLoading}>
                         <PlusCircle className="h-4 w-4 mr-2" />
-                        {t('admin.blogs.create')}
+                        {t("admin.blogs.create")}
                       </Button>
                     </div>
                   </div>
@@ -372,13 +455,13 @@ export default function AdminPage() {
               </div>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="settings">
             <Card>
               <CardHeader>
-                <CardTitle>Account Settings</CardTitle>
+                <CardTitle>{t("admin.account.settings") || "Account Settings"}</CardTitle>
                 <CardDescription>
-                  Manage your account settings and preferences
+                  {t("admin.account.manage") || "Manage your account settings and preferences"}
                 </CardDescription>
               </CardHeader>
               <CardContent>

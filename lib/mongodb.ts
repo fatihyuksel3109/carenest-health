@@ -1,6 +1,7 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/carenest';
+console.log("MongoDB URI:", uri); // Debug URI
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
@@ -10,8 +11,6 @@ if (!process.env.MONGODB_URI) {
 }
 
 if (process.env.NODE_ENV === 'development') {
-  // In development mode, use a global variable so that the value
-  // is preserved across module reloads caused by HMR (Hot Module Replacement).
   let globalWithMongo = global as typeof globalThis & {
     _mongoClientPromise?: Promise<MongoClient>;
   };
@@ -24,11 +23,19 @@ if (process.env.NODE_ENV === 'development') {
         deprecationErrors: true,
       },
     });
-    globalWithMongo._mongoClientPromise = client.connect();
+    console.log("Connecting to MongoDB in development..."); // Debug
+    globalWithMongo._mongoClientPromise = client.connect()
+      .then(() => {
+        console.log("MongoDB connected successfully");
+        return client;
+      })
+      .catch(err => {
+        console.error("MongoDB connection failed:", err);
+        throw err;
+      });
   }
   clientPromise = globalWithMongo._mongoClientPromise;
 } else {
-  // In production mode, it's best to not use a global variable.
   client = new MongoClient(uri, {
     serverApi: {
       version: ServerApiVersion.v1,
@@ -36,7 +43,16 @@ if (process.env.NODE_ENV === 'development') {
       deprecationErrors: true,
     },
   });
-  clientPromise = client.connect();
+  console.log("Connecting to MongoDB in production..."); // Debug
+  clientPromise = client.connect()
+    .then(() => {
+      console.log("MongoDB connected successfully");
+      return client;
+    })
+    .catch(err => {
+      console.error("MongoDB connection failed:", err);
+      throw err;
+    });
 }
 
 export default clientPromise;

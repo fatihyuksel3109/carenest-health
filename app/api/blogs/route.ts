@@ -26,7 +26,6 @@ export async function POST(request: NextRequest) {
     
     const data = await request.json();
     
-    // Validate required fields
     if (!data.title || !data.content) {
       return NextResponse.json({ error: 'Title and content are required' }, { status: 400 });
     }

@@ -47,8 +47,8 @@ const FeatureSection = ({
             <Image
               src={image}
               alt={t(`features.${translationKey}.title`)}
-              width={600}
-              height={400}
+              width={500}
+              height={320}
               className="w-full h-auto object-cover"
               style={{ maxHeight: '400px' }}
             />

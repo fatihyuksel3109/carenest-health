@@ -79,21 +79,32 @@ const translations = {
     'blogs.title': 'Our Blog',
     'blogs.subtitle': 'Latest insights and news',
     'blogs.readMore': 'Read More',
+    "blogs.notFound": "Blog post not found",
+    "blogs.back": "Back to Blogs",
+    "blogs.unknownAuthor": "Unknown Author",
+    "blogs.loading": "Loading",
     
     // Admin Dashboard
     'admin.title': 'Admin Dashboard',
     'admin.blogs.title': 'Manage Blogs',
     'admin.blogs.create': 'Create New Blog',
+    'admin.blogs.settings': 'Settings',
+    'admin.blogs.manage': 'Manage Blogs',
     'admin.blogs.edit': 'Edit Blog',
     'admin.blogs.delete': 'Delete Blog',
     'admin.blogs.form.title': 'Title',
     'admin.blogs.form.content': 'Content',
     'admin.blogs.form.image': 'Image URL',
     'admin.blogs.form.submit': 'Save',
+    'admin.blogs.editCreateTitle': 'Select a blog to edit or create a new one',
+    'admin.blogs.editCreateText': 'Use the buttons on the left to manage your blog posts',
+    'admin.account.settings': 'Account Settings',
+    'admin.account.manage': 'Manage your account settings and preferences',
     'admin.login.title': 'Admin Login',
     'admin.login.email': 'Email',
     'admin.login.password': 'Password',
     'admin.login.submit': 'Login',
+    'admin.loading': 'Loading',
   },
   tr: {
     // Navigation
@@ -163,21 +174,33 @@ const translations = {
     'blogs.title': 'Blogumuz',
     'blogs.subtitle': 'En son içgörüler ve haberler',
     'blogs.readMore': 'Daha Fazla Oku',
+    "blogs.notFound": "Blog yazısı bulunamadı",
+    "blogs.back": "Bloglara Geri Dön",
+    "blogs.unknownAuthor": "Bilinmeyen Yazar",
+    "blogs.loading": "Yükleniyor",
+
     
     // Admin Dashboard
     'admin.title': 'Yönetici Paneli',
     'admin.blogs.title': 'Blogları Yönet',
     'admin.blogs.create': 'Yeni Blog Oluştur',
+    'admin.blogs.settings': 'Ayarlar',
+    'admin.blogs.manage': 'Blogları Düzenle',
     'admin.blogs.edit': 'Blogu Düzenle',
     'admin.blogs.delete': 'Blogu Sil',
     'admin.blogs.form.title': 'Başlık',
     'admin.blogs.form.content': 'İçerik',
     'admin.blogs.form.image': 'Resim URL',
     'admin.blogs.form.submit': 'Kaydet',
+    'admin.blogs.editCreateTitle': 'Blogları düzenleyin ya da yeni bir blog ekleyin',
+    'admin.blogs.editCreateText': 'Bloglarınızı düzenlemek için soldaki butonları kullanın',
+    'admin.account.settings': 'Hesap Ayarları',
+    'admin.account.manage': 'Hesap ayarlarınızı ve tercihlerinizi düzenleyin',
     'admin.login.title': 'Yönetici Girişi',
     'admin.login.email': 'E-posta',
     'admin.login.password': 'Şifre',
     'admin.login.submit': 'Giriş',
+    'admin.loading': 'Yükleniyor',
   }
 };
 
@@ -193,15 +216,23 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [language, setLanguage] = useState<Language>('en');
 
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'tr')) {
-      setLanguage(savedLanguage);
+    if (typeof window !== "undefined") {
+      const savedLanguage = localStorage.getItem('language') as Language;
+      if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'tr')) {
+        setLanguage(savedLanguage);
+      } else {
+        // Detect browser language
+        const browserLang = navigator.language.startsWith('tr') ? 'tr' : 'en';
+        setLanguage(browserLang);
+      }
     }
   }, []);
 
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
-    localStorage.setItem('language', lang);
+    if (typeof window !== "undefined") {
+      localStorage.setItem('language', lang);
+    }
   };
 
   const t = (key: string): string => {

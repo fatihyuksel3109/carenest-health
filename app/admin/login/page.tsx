@@ -1,20 +1,27 @@
 "use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { useLanguage } from '@/components/language-provider';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/components/language-provider";
 
 const formSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -35,28 +42,31 @@ export default function LoginPage() {
 
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
-    
     try {
-      const result = await signIn('credentials', {
+      console.log("Attempting signIn with:", data); // Debug
+      const result = await signIn("credentials", {
         redirect: false,
         email: data.email,
         password: data.password,
       });
-
+      console.log("signIn result:", result); // Debug
       if (result?.error) {
+        console.error("Authentication error:", result.error); // Debug
         toast({
-          title: 'Authentication failed',
-          description: 'Invalid email or password',
-          variant: 'destructive',
+          title: "Authentication failed",
+          description: result.error || "Invalid email or password",
+          variant: "destructive",
         });
       } else {
-        router.push('/admin');
+        console.log("Login successful, redirecting to /admin"); // Debug
+        router.push("/admin");
       }
     } catch (error) {
+      console.error("signIn catch error:", error); // Debug
       toast({
-        title: 'An error occurred',
-        description: 'Please try again later',
-        variant: 'destructive',
+        title: "An error occurred",
+        description: "Please try again later",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -68,7 +78,7 @@ export default function LoginPage() {
       <div className="container mx-auto px-4 py-12 flex justify-center">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>{t('admin.login.title')}</CardTitle>
+            <CardTitle>{t("admin.login.title")}</CardTitle>
             <CardDescription>
               Enter your credentials to access the admin dashboard
             </CardDescription>
@@ -77,38 +87,36 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium">
-                  {t('admin.login.email')}
+                  {t("admin.login.email")}
                 </label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="admin@carenest.com"
-                  {...register('email')}
-                  className={errors.email ? 'border-destructive' : ''}
+                  {...register("email")}
+                  className={errors.email ? "border-destructive" : ""}
                 />
                 {errors.email && (
                   <p className="text-destructive text-sm">{errors.email.message}</p>
                 )}
               </div>
-              
               <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-medium">
-                  {t('admin.login.password')}
+                  {t("admin.login.password")}
                 </label>
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
-                  {...register('password')}
-                  className={errors.password ? 'border-destructive' : ''}
+                  {...register("password")}
+                  className={errors.password ? "border-destructive" : ""}
                 />
                 {errors.password && (
                   <p className="text-destructive text-sm">{errors.password.message}</p>
                 )}
               </div>
-              
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : t('admin.login.submit')}
+                {isLoading ? "Logging in..." : t("admin.login.submit")}
               </Button>
             </form>
           </CardContent>
