@@ -53,46 +53,127 @@ export default function AboutPage() {
   // Services data with dummy photos
   const services = [
     {
+      title: t('footer.services.homeDoctorVisit') || "Home Doctor Visit",
+      description:
+        language === "tr"
+          ? "Evde doktor muayenesi ile sağlık hizmetini ayağınıza getirin."
+          : "Receive professional medical care at home with a doctor visit.",
+      image: "/assets/images/home-doctor-visit.jpg",
+    },
+    {
+      title: t('footer.services.homeCheckup') || "Home Checkup",
+      description:
+        language === "tr"
+          ? "Evde check-up hizmetimizle genel sağlık durumunuzu değerlendirin."
+          : "Get a comprehensive health assessment with our home checkup service.",
+      image: "/assets/images/home-checkup.jpg",
+    },
+    {
+      title: t('footer.services.bloodTests') || "Blood Tests",
+      description:
+        language === "tr"
+          ? "Evde kan tahlili hizmetimizle sağlığınızı düzenli olarak takip edin."
+          : "Monitor your health with our convenient at-home blood tests.",
+      image: "/assets/images/blood-test.jpg",
+    },
+    {
+      title: t('footer.services.cancerScreening') || "Cancer Screening Tests",
+      description:
+        language === "tr"
+          ? "Erken teşhis için evde kanser tarama testlerinizi yaptırın."
+          : "Detect early signs of cancer with at-home screening tests.",
+      image: "/assets/images/cancer-screening.jpg",
+    },
+    {
+      title: t('footer.services.bpSugarMonitoring') || "Blood Pressure & Sugar Monitoring",
+      description:
+        language === "tr"
+          ? "Evde tansiyon ve şeker takibi ile sağlığınızı kontrol altında tutun."
+          : "Keep track of your health with at-home blood pressure and sugar monitoring.",
+      image: "/assets/images/bp-sugar-monitoring.jpg",
+    },
+    {
+      title: t('footer.services.injection') || "Injection Services",
+      description:
+        language === "tr"
+          ? "Evde enjeksiyon hizmetlerimizle sağlığınızı kolay ve güvenli bir şekilde koruyun."
+          : "Protect your health with our safe and convenient at-home injection services.",
+      image: "/assets/images/injection-service.jpg",
+    },
+    {
       title: t('footer.services.serumTherapy') || "Serum Therapy",
       description:
         language === "tr"
-          ? "Evde serum terapisi ile sıvı ihtiyacınızı karşılayın ve iyileşme sürecinizi hızlandırın."
-          : "Receive serum therapy at home to meet your hydration needs and accelerate recovery.",
+          ? "Evde serum terapisi ile sıvı ihtiyacınızı karşılayarak iyileşme sürecinizi hızlandırın."
+          : "Receive at-home serum therapy to stay hydrated and speed up your recovery.",
       image: "/assets/images/serum-therapy.jpg",
-    },
-    {
-      title: t('footer.services.cuppingTherapy') || "Cupping Therapy",
-      description:
-        language === "tr"
-          ? "Hacamat terapisi ile toksinleri vücudunuzdan atın ve kan dolaşımınızı iyileştirin."
-          : "Detoxify your body and improve blood circulation with cupping therapy.",
-      image: "/assets/images/cupping-therapy.jpg",
     },
     {
       title: t('footer.services.vitaminTherapy') || "Vitamin Therapy",
       description:
         language === "tr"
           ? "Vitamin terapisi ile enerji seviyenizi artırın ve bağışıklık sisteminizi güçlendirin."
-          : "Boost your energy levels and strengthen your immune system with vitamin therapy.",
+          : "Boost your energy and strengthen your immune system with vitamin therapy.",
       image: "/assets/images/vitamin-therapy.jpg",
     },
     {
-      title: t('footer.services.injection') || "Injection",
+      title: t('footer.services.ozoneTherapy') || "Ozone Therapy",
       description:
         language === "tr"
-          ? "Evde enjeksiyon hizmetlerimizle sağlığınızı koruyun, kolay ve güvenli bir şekilde."
-          : "Protect your health with our at-home injection services, easily and safely.",
-      image: "/assets/images/injection-service.jpg",
+          ? "Ozon terapisi ile bağışıklık sisteminizi güçlendirin ve hücresel yenilenmeyi destekleyin."
+          : "Boost your immune system and promote cellular renewal with ozone therapy.",
+      image: "/assets/images/ozone-therapy.jpg",
     },
     {
-      title: t('footer.services.leechingTherapy') || "Leeching Therapy",
+      title: t('footer.services.prpTherapy') || "PRP Therapy",
       description:
         language === "tr"
-          ? "Sülük terapisi ile doğal yollarla ağrı ve iltihabı azaltın."
-          : "Reduce pain and inflammation naturally with leeching therapy.",
+          ? "PRP tedavisi ile cildinizi yenileyin ve sağlıklı bir görünüm kazanın."
+          : "Rejuvenate your skin and achieve a youthful glow with PRP therapy.",
+      image: "/assets/images/prp-therapy.jpeg",
+    },
+    {
+      title: t('footer.services.medicalAesthetics') || "Medical Aesthetics",
+      description:
+        language === "tr"
+          ? "Medikal estetik uygulamalarımızla doğal güzelliğinizi koruyun."
+          : "Enhance your natural beauty with our medical aesthetic treatments.",
+      image: "/assets/images/medical-aesthetics.png",
+    },
+    {
+      title: t('footer.services.cuppingTherapy') || "Cupping Therapy",
+      description:
+        language === "tr"
+          ? "Hacamat terapisi ile vücudunuzu toksinlerden arındırın ve kan dolaşımınızı iyileştirin."
+          : "Detoxify your body and improve circulation with cupping therapy.",
+      image: "/assets/images/cupping-therapy.jpg",
+    },
+    {
+      title: t('footer.services.leechingTherapy') || "Leech Therapy",
+      description:
+        language === "tr"
+          ? "Sülük terapisi ile ağrı ve iltihabı doğal yollarla azaltın."
+          : "Relieve pain and inflammation naturally with leech therapy.",
       image: "/assets/images/leech-therapy.png",
     },
+    {
+      title: t('footer.services.catheterCare') || "Catheter Insertion & Removal",
+      description:
+        language === "tr"
+          ? "Sonda takma ve çıkarma işlemlerinizde uzman desteği alın."
+          : "Receive expert assistance for catheter insertion and removal at home.",
+      image: "/assets/images/catheter-care.jpg",
+    },
+    {
+      title: t('footer.services.woundCare') || "Wound Care",
+      description:
+        language === "tr"
+          ? "Evde profesyonel yara bakımı ile daha hızlı iyileşin."
+          : "Heal faster with professional at-home wound care services.",
+      image: "/assets/images/wound-care.jpg",
+    }
   ];
+  
 
   return (
     <div className="pt-24">
