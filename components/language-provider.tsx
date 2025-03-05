@@ -173,7 +173,7 @@ const translations = {
 
     // Features Section (FeatureSection)
     'features.offer.title': 'Neler Sunuyoruz?',
-    'features.offer.description': 'Carenest, kapsamlı ev bakım hizmetleri sunan, özellikle sıkı bakım rutinleri olan ve karmaşık bakım gerektiren bireyler için özel olarak uzmanlaşmış lider bir sağlayıcıdır. Olağanüstü bakıma olan bağlılığımız yaklaşımımıza derinden yerleşmiştir ve Sosyal Adalet Derneği tarafından güvenilir sağlayıcıları olarak onaylanmıştır. Erişilebilirliğinizi ve toplum entegrasyonunuzu geliştirmeye odaklanıyor, sizi doyurucu ve bağımsız bir yaşam sürmenizi sağlayan özel destek sunuyoruz.',
+    'features.offer.description': 'Carenest, kapsamlı ev bakım hizmetleri sunan, özellikle sıkı bakım rutinleri olan ve kapsamlı bakım gerektiren bireyler için özel olarak uzmanlaşmış lider bir sağlayıcıdır. Olağanüstü bakıma olan bağlılığımız yaklaşımımıza derinden yerleşmiştir ve Sosyal Adalet Derneği tarafından güvenilir sağlayıcıları olarak onaylanmıştır. Erişilebilirliğinizi ve toplum entegrasyonunuzu geliştirmeye odaklanıyor, sizi doyurucu ve bağımsız bir yaşam sürmenizi sağlayan özel destek sunuyoruz.',
     'features.offer.imageAlt': 'Bir bakıcı pencereyi temizliyor',
     'features.apart.title': 'Bizi Farklı Kılan Nedir?',
     'features.apart.description': 'Carenest’te, daha sağlıklı bir ortam yaratma ve yüksek kaliteli iş yaratma yoluyla toplulukları güçlendirme taahhüdümüz bizi farklı kılıyor. Her takım üyesinin değerli ve saygı gördüğü, doğrudan müşteri bakımımızın kalitesini artıran destekleyici ve güçlendirici bir çalışma atmosferini önceliklendiriyoruz. Mükemmellik, şefkat ve saygınlığa olan bağlılığımız, sadece bakım standartlarını yükseltmekle kalmaz, aynı zamanda müşterilerimizin tatmin edici ve bağımsız yaşamlar sürmelerini sağlar. Üstün bakımı güçlü toplum katılımıyla birleştirerek, hem müşterilerimizi hem de genel olarak toplumu yükseltmeye adanmış, sağlık hizmetleri ve toplum gelişiminde güvenilir bir ortak olarak tanınıyoruz.',
@@ -189,7 +189,7 @@ const translations = {
     'values.empowering.description': 'Refahı iyileştiriyor ve insanların güçlendirici seçimler yapmasını sağlıyoruz.',
 
     // Footer
-    'footer.description': '2020’den beri evde şefkatli ve saygın karmaşık bakım sağlıyoruz.',
+    'footer.description': '2020’den beri evde şefkatli ve saygın kapsamlı bakım sağlıyoruz.',
     'footer.quickLinks': 'Hızlı Bağlantılar',
     'footer.services': 'Hizmetler',
     'footer.services.complexCare': 'Karmaşık Bakım',
@@ -240,12 +240,12 @@ const translations = {
     'about.mission.title': 'Misyonumuz',
     'about.mission.description': 'Bireylerin evlerinin konforunda tatmin edici yaşamlar sürmelerini sağlayan şefkatli, saygın ve kişiselleştirilmiş bakım sağlamak.',
     'about.vision.title': 'Vizyonumuz',
-    'about.vision.description': 'Mükemmellik, yenilikçilik ve müşterilerimizin yaşam kalitesini artırmaya yönelik sarsılmaz bağlılığıyla tanınan, karmaşık ev bakımının önde gelen sağlayıcısı olmak.',
+    'about.vision.description': 'Mükemmellik, yenilikçilik ve müşterilerimizin yaşam kalitesini artırmaya yönelik sarsılmaz bağlılığıyla tanınan, kapsamlı ev bakımının önde gelen sağlayıcısı olmak.',
     'about.team.title': 'Ekibimiz',
     'about.team.description': 'Adanmış profesyonellerden oluşan ekibimiz, olağanüstü bakım sunma konusunda uzmanlık, şefkat ve ortak bir bağlılık getiriyor.',
     'about.team.member1.name': 'Dr. Sarah Johnson',
     'about.team.member1.position': 'Baş Tıbbi Sorumlu',
-    'about.team.member1.description': 'Dr. Johnson, evde sağlık hizmetlerinde 15 yılı aşkın deneyime sahip, karmaşık bakım ve hasta savunuculuğu konusunda uzmanlaşmıştır.',
+    'about.team.member1.description': 'Dr. Johnson, evde sağlık hizmetlerinde 15 yılı aşkın deneyime sahip, kapsamlı bakım ve hasta savunuculuğu konusunda uzmanlaşmıştır.',
     'about.team.member2.name': 'Emily Davis',
     'about.team.member2.position': 'Baş Hemşire',
     'about.team.member2.description': 'Emily, şefkatli bakım ve yenilikçi terapi çözümlerine odaklanarak hemşire ekibimizi yönetiyor.',
