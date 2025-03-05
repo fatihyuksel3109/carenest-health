@@ -1,3 +1,4 @@
+// app/components/header.tsx
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -12,9 +13,15 @@ import { useLanguage } from './language-provider';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false); // Add mounted state
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+
+  // Ensure theme-dependent UI renders only after mounting on the client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -87,7 +94,7 @@ const Header = () => {
               className="p-2 rounded-full hover:bg-muted transition-colors"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              {mounted ? (theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />) : null}
             </button>
             <button
               onClick={toggleLanguage}
@@ -106,7 +113,7 @@ const Header = () => {
               className="p-2 rounded-full hover:bg-muted transition-colors"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              {mounted ? (theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />) : null}
             </button>
             <button
               onClick={toggleLanguage}
