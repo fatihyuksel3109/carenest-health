@@ -10,6 +10,9 @@ import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { cn } from '@/lib/utils';
 import { useLanguage } from './language-provider';
+import Flag from "react-world-flags";
+
+
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -115,7 +118,7 @@ const Header = () => {
               className="p-2 rounded-full hover:bg-muted transition-colors flex items-center"
               aria-label="Toggle language"
             >
-              <Globe size={20} className="mr-1" />
+              { language === "en" ? <Flag code="usa" height="24" className="mr-1 h-6 w-6" /> : <Flag code="tur" height="24" className="mr-1 h-6 w-6" />}
               <span className="text-xs font-bold">{language.toUpperCase()}</span>
             </button>
           </nav>
@@ -134,7 +137,7 @@ const Header = () => {
               className="p-2 rounded-full hover:bg-muted transition-colors flex items-center"
               aria-label="Toggle language"
             >
-              <Globe size={20} className="mr-1" />
+              { language === "en" ? <Flag code="usa" height="24" className="mr-1 h-6 w-6" /> : <Flag code="tur" height="24" className="mr-1 h-6 w-6" />}
               <span className="text-xs font-bold">{language.toUpperCase()}</span>
             </button>
             <button
