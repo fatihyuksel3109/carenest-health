@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image'; // Import Image component
 import { usePathname } from 'next/navigation';
 import { Menu, X, Sun, Moon, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,7 @@ import { useLanguage } from './language-provider';
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false); // Add mounted state
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
@@ -66,8 +67,21 @@ const Header = () => {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center" onClick={closeMenu}>
-            <span className="text-2xl font-bold text-primary">Carenest</span>
+          <Link href="/" className="flex items-center space-y-2" onClick={closeMenu}>
+            <Image
+              src="/assets/images/carenestlogo.png"
+              alt="Carenest Istanbul Logo"
+              width={75} 
+              height={75} 
+              className="object-contain"
+            />
+            <Image
+              src="/assets/images/carenestlogo-text.png"
+              alt="Carenest Istanbul Logo"
+              width={150} 
+              height={75} 
+              className="object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}

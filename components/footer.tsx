@@ -1,6 +1,8 @@
+// app/components/footer.tsx
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image'; // Import Image component
 import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from 'lucide-react';
 import { useLanguage } from './language-provider';
 
@@ -13,7 +15,15 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <h3 className="text-xl font-bold">Carenest</h3>
+            <div className="flex items-center space-x-2">
+              <Image
+                src="/assets/images/carenestlogo-text.png"
+                alt="Carenest Istanbul Logo"
+                width={120} // Adjust width as needed
+                height={120} // Adjust height as needed
+                className="object-contain -mt-4"
+              />
+            </div>
             <p className="text-sm">
               {t('footer.description')}
             </p>
