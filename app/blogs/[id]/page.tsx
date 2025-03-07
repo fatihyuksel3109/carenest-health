@@ -1,4 +1,3 @@
-// app/blogs/[id]/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -10,7 +9,7 @@ import Image from "next/image";
 import { useLanguage } from "@/components/language-provider";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm"; // Add remark-gfm
+import remarkGfm from "remark-gfm";
 
 interface Blog {
   _id: string;
@@ -53,8 +52,27 @@ export default function BlogPost() {
     return (
       <div className="pt-24">
         <div className="container mx-auto px-4 py-12">
-          <div className="flex justify-center items-center h-64">
-            <p className="text-lg">{t("blogs.loading") || "Loading..."}</p>
+          <div className="flex justify-center items-center mb-6 animate-pulse">
+            <div className="h-6 bg-gray-200 rounded w-1/4"></div>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 animate-pulse bg-gray-200 h-12 w-full rounded"></h1>
+
+            <div className="flex items-center mb-6 animate-pulse">
+              <div className="mr-4">
+                <p className="font-semibold h-6 bg-gray-200 rounded w-1/3"></p>
+              </div>
+              <div className="text-sm text-muted-foreground h-4 bg-gray-200 rounded w-1/4"></div>
+            </div>
+
+            <div className="rounded-lg overflow-hidden mb-8 animate-pulse">
+              <div className="bg-gray-200 h-[500px] w-full"></div>
+            </div>
+
+            <div className="prose prose-lg max-w-none dark:prose-invert animate-pulse">
+              <div className="h-96 bg-gray-200 rounded"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -117,7 +135,7 @@ export default function BlogPost() {
           <div className="prose prose-lg max-w-none dark:prose-invert">
             <ReactMarkdown
               rehypePlugins={[rehypeRaw]}
-              remarkPlugins={[remarkGfm]} // Add remark-gfm for full Markdown support
+              remarkPlugins={[remarkGfm]}
             >
               {blog.content[language]}
             </ReactMarkdown>

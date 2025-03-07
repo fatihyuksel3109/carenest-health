@@ -59,9 +59,9 @@ export default function AdminPage() {
   // Admin settings state
   const [adminData, setAdminData] = useState<AdminData | null>(null);
   const [adminForm, setAdminForm] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
   const [isEditingAdmin, setIsEditingAdmin] = useState(false);
 
@@ -96,22 +96,22 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchAdminData = async () => {
       try {
-        console.log('Fetching admin data with session:', session);
-        const response = await fetch('/api/admin');
-        if (!response.ok) throw new Error('Failed to fetch admin data');
+        console.log("Fetching admin data with session:", session);
+        const response = await fetch("/api/admin");
+        if (!response.ok) throw new Error("Failed to fetch admin data");
         const data = await response.json();
         setAdminData(data);
-        setAdminForm({ name: data.name, email: data.email, password: '' });
+        setAdminForm({ name: data.name, email: data.email, password: "" });
       } catch (error) {
-        console.error('Fetch admin error:', error);
+        console.error("Fetch admin error:", error);
         toast({
-          title: 'Error',
-          description: 'Failed to load admin data',
-          variant: 'destructive',
+          title: "Error",
+          description: "Failed to load admin data",
+          variant: "destructive",
         });
       }
     };
-  
+
     if (status === "authenticated") {
       fetchAdminData();
     }
@@ -271,18 +271,18 @@ export default function AdminPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/admin', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/admin", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(adminForm),
       });
-      if (!response.ok) throw new Error('Failed to update admin data');
+      if (!response.ok) throw new Error("Failed to update admin data");
       const updatedData = await response.json();
       setAdminData(updatedData.data);
       setIsEditingAdmin(false);
       toast({
-        title: 'Admin updated',
-        description: 'Your account information has been successfully updated.',
+        title: "Admin updated",
+        description: "Your account information has been successfully updated.",
       });
 
       // If email or password changed, sign out to force re-authentication
@@ -291,14 +291,14 @@ export default function AdminPage() {
         adminForm.password
       ) {
         await signOut({ redirect: false });
-        router.push('/admin/login');
+        router.push("/admin/login");
       }
     } catch (error) {
-      console.error('Admin update error:', error);
+      console.error("Admin update error:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to update admin data',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to update admin data",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -309,8 +309,104 @@ export default function AdminPage() {
     return (
       <div className="pt-24">
         <div className="container mx-auto px-4 py-12">
-          <div className="flex justify-center items-center h-64">
-            <p className="text-lg">{t('admin.loading')}</p>
+          <h1 className="text-3xl font-bold mb-8 animate-pulse bg-gray-200 h-10 w-1/2 rounded"></h1>
+
+          <div className="animate-pulse">
+            <div className="h-10 bg-gray-200 rounded w-full mb-8"></div> {/* Tabs placeholder */}
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-1">
+                <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div> {/* Blog list title */}
+                <div className="space-y-4">
+                  {Array(3).fill(null).map((_, index) => (
+                    <Card key={index} className="overflow-hidden">
+                      <div className="h-32 bg-gray-200 rounded-t-lg"></div>
+                      <CardHeader className="p-4">
+                        <CardTitle className="h-6 bg-gray-200 rounded w-3/4"></CardTitle>
+                        <CardDescription className="h-4 bg-gray-200 rounded w-1/2 mt-2"></CardDescription>
+                      </CardHeader>
+                      <CardFooter className="p-4 pt-0 flex justify-between">
+                        <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+                        <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              <div className="lg:col-span-2">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="h-8 bg-gray-200 rounded w-1/3"></CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <Tabs defaultValue="en" className="w-full">
+                        <TabsList className="mb-4">
+                          <div className="h-10 bg-gray-200 rounded w-1/4"></div> {/* Tabs placeholder */}
+                        </TabsList>
+                        <TabsContent value="en">
+                          <div className="space-y-2">
+                            <div className="h-4 bg-gray-200 rounded w-1/6"></div> {/* Label */}
+                            <div className="h-10 bg-gray-200 rounded w-full"></div> {/* Input */}
+                          </div>
+                          <div className="space-y-2">
+                            <div className="h-4 bg-gray-200 rounded w-1/6"></div> {/* Label */}
+                            <div className="h-20 bg-gray-200 rounded w-full"></div> {/* Textarea */}
+                          </div>
+                          <div className="space-y-2">
+                            <div className="h-4 bg-gray-200 rounded w-1/6"></div> {/* Label */}
+                            <div className="h-40 bg-gray-200 rounded w-full"></div> {/* Textarea */}
+                          </div>
+                        </TabsContent>
+                        <TabsContent value="tr">
+                          <div className="space-y-2">
+                            <div className="h-4 bg-gray-200 rounded w-1/6"></div> {/* Label */}
+                            <div className="h-10 bg-gray-200 rounded w-full"></div> {/* Input */}
+                          </div>
+                          <div className="space-y-2">
+                            <div className="h-4 bg-gray-200 rounded w-1/6"></div> {/* Label */}
+                            <div className="h-20 bg-gray-200 rounded w-full"></div> {/* Textarea */}
+                          </div>
+                          <div className="space-y-2">
+                            <div className="h-4 bg-gray-200 rounded w-1/6"></div> {/* Label */}
+                            <div className="h-40 bg-gray-200 rounded w-full"></div> {/* Textarea */}
+                          </div>
+                        </TabsContent>
+                      </Tabs>
+                      <div className="space-y-2">
+                        <div className="h-4 bg-gray-200 rounded w-1/6"></div> {/* Label */}
+                        <div className="h-10 bg-gray-200 rounded w-full"></div> {/* Input */}
+                      </div>
+                      <div className="flex justify-end space-x-4">
+                        <div className="h-10 bg-gray-200 rounded w-1/4"></div> {/* Cancel button */}
+                        <div className="h-10 bg-gray-200 rounded w-1/4"></div> {/* Submit button */}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 animate-pulse">
+            <Card>
+              <CardHeader>
+                <CardTitle className="h-8 bg-gray-200 rounded w-1/3"></CardTitle>
+                <CardDescription className="h-4 bg-gray-200 rounded w-1/2"></CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {Array(3).fill(null).map((_, index) => (
+                    <div key={index}>
+                      <div className="h-4 bg-gray-200 rounded w-1/6"></div> {/* Label */}
+                      <div className="h-6 bg-gray-200 rounded w-3/4 mt-1"></div> {/* Value */}
+                    </div>
+                  ))}
+                  <div className="h-10 bg-gray-200 rounded w-1/4"></div> {/* Edit button */}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
@@ -318,7 +414,7 @@ export default function AdminPage() {
   }
 
   if (status === "unauthenticated") {
-    return null;
+    return null; // Redirect handled by useEffect
   }
 
   return (
@@ -595,7 +691,7 @@ export default function AdminPage() {
                         Cancel
                       </Button>
                       <Button type="submit" disabled={isLoading}>
-                        {isLoading ? 'Saving...' : 'Save Changes'}
+                        {isLoading ? "Saving..." : "Save Changes"}
                       </Button>
                     </div>
                   </form>
@@ -603,15 +699,15 @@ export default function AdminPage() {
                   <div className="space-y-4">
                     <div>
                       <p className="font-medium">Name</p>
-                      <p className="text-muted-foreground">{adminData?.name || 'Loading...'}</p>
+                      <p className="text-muted-foreground">{adminData?.name || "Loading..."}</p>
                     </div>
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-muted-foreground">{adminData?.email || 'Loading...'}</p>
+                      <p className="text-muted-foreground">{adminData?.email || "Loading..."}</p>
                     </div>
                     <div>
                       <p className="font-medium">Role</p>
-                      <p className="text-muted-foreground">{adminData?.role || 'Loading...'}</p>
+                      <p className="text-muted-foreground">{adminData?.role || "Loading..."}</p>
                     </div>
                     <Button onClick={() => setIsEditingAdmin(true)} disabled={isLoading || !adminData}>
                       Edit Profile

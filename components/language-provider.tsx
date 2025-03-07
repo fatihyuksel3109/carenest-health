@@ -167,7 +167,7 @@ const translations = {
     'nav.getService': 'Hizmet Al',
 
     // Hero Section (HeroCarousel)
-    'hero.title': 'Evde Şefkat ve Saygınlıkla Sunulan Karmaşık Bakım',
+    'hero.title': 'Evinizde Şefkat ve Saygınlıkla Sunulan Uzman Bakım',
     'hero.description': 'İstanbul’da şefkatli evde sağlık hizmetleri sunuyoruz.',
     'hero.cta': 'Hizmet Al',
 
