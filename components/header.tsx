@@ -138,7 +138,6 @@ const Header = () => {
               aria-label="Toggle language"
             >
               { language === "en" ? <Flag code="usa" height="24" className="mr-1 h-6 w-6" /> : <Flag code="tur" height="24" className="mr-1 h-6 w-6" />}
-              <span className="text-xs font-bold">{language.toUpperCase()}</span>
             </button>
             <button
               onClick={toggleMenu}
