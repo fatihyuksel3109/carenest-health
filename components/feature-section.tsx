@@ -1,4 +1,3 @@
-// app/components/feature-section.tsx
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -10,7 +9,7 @@ import { cn } from "@/lib/utils";
 interface FeatureSectionProps {
   image: string;
   reverse?: boolean;
-  translationKey: 'offer' | 'apart';
+  translationKey: "offer" | "apart";
 }
 
 const FeatureSection = ({
@@ -88,10 +87,10 @@ const FeatureSection = ({
           ref={imageRef}
           className={cn(
             "relative",
-            reverse ? "md:order-1 -ml-0 md:-ml-24" : "md:order-2 -mr-0 md:-mr-24"
+            reverse ? "md:order-1" : "md:order-2"
           )}
         >
-          <div className="rounded-lg overflow-hidden shadow-xl">
+          <div className="rounded-lg overflow-hidden shadow-xl w-full max-w-full">
             <Image
               src={image}
               alt={t(`features.${translationKey}.title`)}
