@@ -140,7 +140,7 @@ We welcome contributions! Please follow these steps:
 This project is licensed under the [MIT License](LICENSE). See the `LICENSE` file for details.
 
 ## Contact
-- **Project Maintainer**: [Your Name]  
-- **Email**: your.email@example.com  
+- **Project Maintainer**: [Fatih Yuksel]  
+- **Email**: fatihyukseldev@gmail.com  
 - **GitHub**: [https://github.com/fatihyuksel3109](https://github.com/fatihyuksel3109)  
 - **Issues**: Report bugs or feature requests at [Issues Page](https://github.com/fatihyuksel3109/carenest-health/issues)
