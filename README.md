@@ -5,7 +5,7 @@ Below is a professionally structured `README.md` file tailored for your applicat
 ```markdown
 # Carenest - Healthcare Management Platform
 
-![Carenest Logo](https://raw.githubusercontent.com/fatihyuksel3109/carenest-health/refs/heads/main/public/assets/images/carenestlogo.png) 
+![Carenest Logo](https://raw.githubusercontent.com/fatihyuksel3109/carenest-health/main/public/assets/images/carenestlogo.png)
 
 Welcome to **Carenest**, a modern web application built with Next.js to provide healthcare services, blog management, and administrative tools. This platform supports multiple languages (English and Turkish), features an intuitive admin dashboard, and offers a seamless user experience for exploring healthcare services and contacting support.
 
