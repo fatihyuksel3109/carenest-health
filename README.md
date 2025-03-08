@@ -1,8 +1,3 @@
-Below is a professionally structured `README.md` file tailored for your application. This README assumes your app is a multi-language healthcare-related website (e.g., "Carenest") with features like blog management, admin panels, service showcases, and contact forms. It includes setup instructions, usage details, and sections for contributors and licensing. You can customize the placeholders (e.g., project name, description, and URLs) to match your specific app.
-
----
-
-```markdown
 # Carenest - Healthcare Management Platform
 
 ![Carenest Logo](https://raw.githubusercontent.com/fatihyuksel3109/carenest-health/main/public/assets/images/carenestlogo.png)
